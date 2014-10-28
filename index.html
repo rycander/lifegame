@@ -2,44 +2,73 @@
 <html>
   <head>
     <title>Conway's Game of Life</title>
-    
     <style>
-      html, body, canvas {
-        padding: 0px;
-        margin: 0px;  
-        overflow: hidden;
+      li{
+        display: inline-block;
+        margin: 0;
+      }
+
+      body{
+        background-color: #999999;
+      }
+
+      div.holder {
+        background-color: white;
+        padding: 20px;
+        width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+      }
+
+      ul {
+        list-style: none;
+      }
+
+      canvas {
+        margin: 0 50px;
       }
     </style>
-      
   </head>
   
   
   <body>
-    <p>Implementation of Conway's Game of Life</p>
-    <canvas></canvas>
-    <p>Click on the canvas to toggle a cell</p>
-    <p>Keyboard:</p>
-    <ul>
-      <li>R: run</li>
-      <li>P: pause</li>
-      <li>S: save</li>
-      <li>L: load</li>
-    </ul>
-    <p>WARNING: While the viewport is only 500x500 pixels, the internal representation of the universe has no maximum size. If you leave the game on for a while with cells crawling out of the screen, you WILL crash your browser.</p>
+    <div class='holder'>
+      <h1>Implementation of Conway's Game of Life</h1>
+      <p>Click on the canvas to toggle a cell</p>
+      <ul>
+        <li>
+          <button href="#" id='play'>Play/Pause</button>
+        </li>
+        <li>
+          <button id="save">Save</button>
+        </li>
+        <li>
+          <button onclick="document.getElementById('file').click();">
+            Load
+          </button>
+          
+        </li>
+      </ul>
+      <canvas></canvas>
+      <input type="file" id="file" style='visibility: hidden;'/>
+    </div>
+
     <script src = "jquery-2.1.1.js"></script>
     <script src = "bignumber.js"></script>
     <script src = "lifegame.js"></script>
     <script>
     var canvas = document.getElementsByTagName("canvas")[0];
     var ctx = canvas.getContext("2d");
-    canvas.height = 500;
-    canvas.width = 500;
+    canvas.height = 800;
+    canvas.width = 800;
     
     var lifegame = new window.LifeGame({
       height: canvas.height,
       width: canvas.width,
       ctx: canvas.getContext("2d")
     });
+
     
     </script>
   </body>
