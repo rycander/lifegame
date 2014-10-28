@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Conway's Game of Life</title>
+    
+    <style>
+      html, body, canvas {
+        padding: 0px;
+        margin: 0px;  
+        overflow: hidden;
+      }
+    </style>
+      
+  </head>
+  
+  
+  <body>
+    <p>Implementation of Conway's Game of Life</p>
+    <canvas></canvas>
+    <p>Click on the canvas to toggle a cell</p>
+    <p>Keyboard:</p>
+    <ul>
+      <li>R: run</li>
+      <li>P: pause</li>
+      <li>S: save</li>
+      <li>L: load</li>
+    </ul>
+    <p>WARNING: While the viewport is only 500x500 pixels, the internal representation of the universe has no maximum size. If you leave the game on for a while with cells crawling out of the screen, you WILL crash your browser.</p>
+    <script src = "jquery-2.1.1.js"></script>
+    <script src = "bignumber.js"></script>
+    <script src = "lifegame.js"></script>
+    <script>
+    var canvas = document.getElementsByTagName("canvas")[0];
+    var ctx = canvas.getContext("2d");
+    canvas.height = 500;
+    canvas.width = 500;
+    
+    var lifegame = new window.LifeGame({
+      height: canvas.height,
+      width: canvas.width,
+      ctx: canvas.getContext("2d")
+    });
+    
+    </script>
+  </body>
+  
+</html>
