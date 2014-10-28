@@ -8,6 +8,8 @@
     this.ctx = opts.ctx;
     this.height = opts.height;
     this.width = opts.width;
+
+    this.draw();
   };
 
   LifeGame.prototype.tempinit = function () {
@@ -106,6 +108,18 @@
 
   LifeGame.prototype.draw = function () {
     console.log(this.liveCells);
+    var ctx = this.ctx;
+    ctx.clearRect(0, 0, this.width, this.height);
+    $.each(this.liveCells, function(cell) {
+      this.drawCell(cell);
+    }.bind(this));
+  };
+
+  LifeGame.prototype.drawCell = function (cell) {
+    var x = this.liveCells[cell].x;
+    var y = this.liveCells[cell].y;
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(x*5, y*5, 5, 5);
   };
 
   LifeGame.prototype.createListeners = function () {
@@ -114,7 +128,7 @@
         this.update();
         this.draw(this.ctx);
       }
-    }).bind(this), 1000);
+    }).bind(this), 100);
 
     //todo: startListener
     //todo: clickListener
