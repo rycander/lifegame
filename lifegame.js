@@ -3,28 +3,12 @@
   window.LifeGame = function (opts) {
     this.liveCells = {};
     this.running = false;
-    this.tempinit();
     this.createListeners();
     this.ctx = opts.ctx;
     this.height = opts.height;
     this.width = opts.width;
 
     this.draw();
-  };
-
-  LifeGame.prototype.tempinit = function () {
-    this.liveCells["11 10"] = {
-      x: new BigNumber('11'),
-      y: new BigNumber('10')
-    };
-    this.liveCells[["12 10"]] = {
-      x: new BigNumber('12'),
-      y: new BigNumber('10')
-    };
-    this.liveCells[["13 10"]] = {
-      x: new BigNumber('13'),
-      y: new BigNumber('10')
-    };
   };
   
   LifeGame.prototype.run = function () {
@@ -94,7 +78,7 @@
         ++liveAdjacent;
       }
     }
-    if (liveAdjacent === 3) {
+    if (liveAdjacent  === 3) {
       this.makeNewCell(x, y);
     }
   };
@@ -107,7 +91,6 @@
   };
 
   LifeGame.prototype.draw = function () {
-    console.log(this.liveCells);
     var ctx = this.ctx;
     ctx.clearRect(0, 0, this.width, this.height);
     $.each(this.liveCells, function(cell) {
@@ -115,11 +98,34 @@
     }.bind(this));
   };
 
+  LifeGame.prototype.toggleCell = function (x, y) {
+    var accessStr = x + " " + y;
+    if (this.liveCells[accessStr]) {
+      delete this.liveCells[accessStr];
+    } else {
+      this.newCells = {};
+      this.makeNewCell(x, y);
+      $.extend(this.liveCells, this.newCells);
+    }
+    this.draw();
+  };
+
   LifeGame.prototype.drawCell = function (cell) {
     var x = this.liveCells[cell].x;
     var y = this.liveCells[cell].y;
     ctx.fillStyle = "#000000";
     ctx.fillRect(x*5, y*5, 5, 5);
+  };
+
+  LifeGame.prototype.save = function () {
+    var data = JSON.stringify(this.liveCells);
+    var url = 'data:text/json;charset=utf8,' + encodeURIComponent(data);
+    window.open(url, 'blank');
+    window.focus();
+  };
+
+  LifeGame.prototype.load = function () {
+
   };
 
   LifeGame.prototype.createListeners = function () {
@@ -130,9 +136,39 @@
       }
     }).bind(this), 100);
 
+    $("body").keydown( function (event) {
+      if (event.which === 82){
+        this.run();
+      }
+      if (event.which === 80){
+        this.pause();
+      }
+      if (event.which === 83){
+        this.save();
+      }
+      if (event.which === 76){
+        this.load();
+      }
+    }.bind(this));
+
+    canvas.addEventListener(
+      'mousedown',
+      function(evt) {
+        var mousePos = this.getMousePos(canvas, evt);
+        var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
+        this.toggleCell(mousePos.x, mousePos.y);
+      }.bind(this));
+  };
+
+  LifeGame.prototype.getMousePos = function (canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+      x: new BigNumber(Math.floor((evt.clientX - rect.left) / 5)),
+      y: new BigNumber(Math.floor((evt.clientY - rect.top) / 5))
+    };
+  };
     //todo: startListener
     //todo: clickListener
-  };
   /*var GameView = window.Asteroids.GameView = function(opts) {
     this.game = new window.Asteroids.Game({
       height: opts.height,
